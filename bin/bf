@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+# coding: utf-8
+
+import sys
+
+def add_path():
+    from os.path import normpath, join, exists, dirname, abspath, realpath
+    libdir = normpath(join(dirname(realpath(__file__)), ".."))
+    if exists(join(libdir, "bf")):
+        sys.path.insert(0, libdir)
+    # sys.argv[0] = os.path.abspath(__file__)
+    return
+
+def main(argv):
+    import argparse as ap
+
+    import bf
+
+    _helloworld = ("+++++++++[>++++++++>+++++++++++>+++++<<<-]>.>++.+++++++..+++.>-."
+                   "------------.<++++++++.--------.+++.------.--------.>+.")
+    bf.main(_helloworld)
+    return
+
+if __name__ == "__main__":
+    add_path()
+    main(sys.argv)
+    # _testcgi()
