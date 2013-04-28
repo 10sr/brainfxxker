@@ -6,8 +6,8 @@ from bf.trans import Translator
 class BF():
     """Brainfxxk."""
 
-    def __init__(self, commands=None, input="", array_len=500):
-        self.a = Array(array_len)
+    def __init__(self, commands=None, input=""):
+        self.a = Array()
         self.t = Translator(commands)
         self.inputstr = input
         return
