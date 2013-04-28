@@ -44,4 +44,6 @@ class Array():
         return i
 
     def __str__(self):
-        return "|" + "|".join(str(i) for i in self.a) + "|"
+        newa = list(self.a)
+        newa[self.i] = "[" + str(self.i) + "]"
+        return "|" + "|".join(str(i) for i in newa) + "|"

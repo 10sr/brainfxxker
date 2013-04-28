@@ -2,6 +2,7 @@
 
 class Instructions():
     def __init__(self, s=""):
+        """Initialize Instruction object."""
         self.s = s
         self.i = 0
         return
