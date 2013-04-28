@@ -57,4 +57,6 @@ class BF():
                 else:
                     s.next()
 
+        print(s)
+        print(self.a)
         return "".join(chr(i) for i in rl)
