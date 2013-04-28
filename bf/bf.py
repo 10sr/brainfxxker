@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
 from bf.array import Array
-from bf.lexer import Lexer
+from bf.trans import Translator
 
 class BF():
     """Brainfxxk."""
 
     def __init__(self, commands=None, input="", array_len=500):
         self.a = Array(array_len)
-        self.l = Lexer(commands)
+        self.t = Translator(commands)
         self.inputstr = input
         return
 
@@ -21,7 +21,7 @@ class BF():
         self.a.reset()
         rl = []                 # list of result in int
 
-        s = self.l.read(s)
+        s = self.t.read(s)
 
         while True:
             cmd = s.get()
