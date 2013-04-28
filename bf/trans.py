@@ -6,7 +6,8 @@ from bf.inst import Instructions
 class Translator():
     """Translator.
 
-    Translate string of instructions into string of one-letter instructions."""
+    Translate string of instructions into string of one-letter instructions.
+    """
 
     cmds = (
         ">",
@@ -22,7 +23,7 @@ class Translator():
     dict = dict()
 
     def __init__(self, cmds=None):
-        """Currnetly one char can be used for commands."""
+        """Initialize Translator."""
         if cmds is None:
             cmds = self.cmds
         self.dict = dict(zip(cmds, self.cmds))
