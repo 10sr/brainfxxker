@@ -17,7 +17,7 @@ class BF():
         """Get one char from self.inputsrt."""
         raise NotImplementedError
 
-    def read(self, s):
+    def eval(self, s):
         """Read string and return result."""
         self.a.reset()
         rl = []                 # list of result in int

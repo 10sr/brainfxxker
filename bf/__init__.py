@@ -2,9 +2,9 @@
 
 from bf.bf import BF
 
-def main(s):
-    bf = BF()
-    r = bf.read(s)
+def main(s, commands=None):
+    bf = BF(commands)
+    r = bf.eval(s)
     print(r)
     return
 
