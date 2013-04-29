@@ -2,6 +2,7 @@
 
 from bf.array import Array
 from bf.trans import Translator
+from bf.inst import Instructions
 
 class BF():
     """Brainfxxk."""
@@ -21,9 +22,12 @@ class BF():
         self.a.reset()
         rl = []                 # list of result in int
 
-        s = self.t.read(s)
+        l = self.t.decode(s)
+        s = Instructions(l)
 
         while True:
+            print(s)
+            print(self.a)
             cmd = s.get()
 
             if cmd is None:
@@ -57,6 +61,4 @@ class BF():
                 else:
                     s.next()
 
-        print(s)
-        print(self.a)
         return "".join(chr(i) for i in rl)
