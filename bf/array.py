@@ -45,5 +45,5 @@ class Array():
 
     def __str__(self):
         newa = list(self.a)
-        newa[self.i] = "[" + str(self.i) + "]"
+        newa[self.i] = "[" + str(self.a[self.i]) + "]"
         return "|" + "|".join(str(i) for i in newa) + "|"

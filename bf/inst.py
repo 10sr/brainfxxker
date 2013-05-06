@@ -4,17 +4,22 @@ class Instructions():
     """Instruction array class."""
     def __init__(self, s=None):
         """Initialize Instruction object."""
+        self.reset(s)
+        return
+
+    def reset(self, s=None):
         self.s = []
         self.i = 0
         if s:
-            for i in s:
-                self.add(i)
+            self.add(s)
         return
 
-    def add(self, c):
+    def add(self, s=None):
         """Add instruction c."""
-        self.s.append(c)
-        return c
+        if s:
+            for c in s:
+                self.s.append(c)
+        return s
 
     def next(self):
         """Move pointer to next."""

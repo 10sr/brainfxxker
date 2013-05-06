@@ -3,6 +3,11 @@
 
 import sys
 
+_helloworld = (
+    "+++++++++[>++++++++>+++++++++++>+++++<<<-]>.>++.+++++++..+++.>-."
+    "------------.<++++++++.--------.+++.------.--------.>+."
+)
+
 def add_path():
     from os.path import normpath, join, exists, dirname, abspath, realpath
     libdir = normpath(join(dirname(realpath(__file__)), ".."))
@@ -16,9 +21,38 @@ def main(argv):
 
     import bf
 
-    _helloworld = ("+++++++++[>++++++++>+++++++++++>+++++<<<-]>.>++.+++++++..+++.>-."
-                   "------------.<++++++++.--------.+++.------.--------.>+.")
-    bf.main(_helloworld)
+    parser = ap.ArgumentParser()
+
+    # parser.add_argument("--commands-list", metavar="commands-list",
+    #                     help="strings used for commands of bf")
+    # parser.add_argument("--commands-list-file", metavar="list-file",
+    #                     help="file containing strings of commands")
+    parser.add_argument("-i", action="store_true",
+                        help="run in interactive mode",
+                        default=False)
+    parser.add_argument("-c", metavar="string",
+                        help="read commands from string")
+    parser.add_argument("filename", help="file to read commands from",
+                        nargs="?")
+    # parser.add_argument("-s")
+
+    args = parser.parse_args(argv[1:])
+    print(args)
+
+    main_args = dict()
+
+    main_args["init_commands"] = args.c or ""
+    if args.filename:
+        with open(args.filename) as f:
+            s = f.read()
+        main_args["init_commands"] = main_args["init_commands"] + s
+    if main_args["init_commands"] and not args.i:
+        main_args["interactive"] = False
+    else:
+        main_args["interactive"] = True
+
+    # bf.main(_helloworld)
+    bf.main(**main_args)
     return
 
 if __name__ == "__main__":

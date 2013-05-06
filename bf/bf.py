@@ -10,6 +10,7 @@ class BF():
     def __init__(self, commands=None, input=""):
         self.a = Array()
         self.t = Translator(commands)
+        self.i = Instructions()
         self.inputstr = input
         return
 
@@ -17,48 +18,58 @@ class BF():
         """Get one char from self.inputsrt."""
         raise NotImplementedError
 
-    def eval(self, s):
-        """Read string and return result."""
+    def reset(self):
         self.a.reset()
+        self.i.reset()
+        return
+
+    def add(self, s):
+        l = self.t.decode(s)
+        self.i.add(l)
+        return
+
+    def run(self):
+        """Run to the end."""
+        # self.a.reset()
         rl = []                 # list of result in int
 
-        l = self.t.decode(s)
-        s = Instructions(l)
+        # l = self.t.decode(s)
+        # s = Instructions(l)
 
         while True:
-            print(s)
+            print(self.i)
             print(self.a)
-            cmd = s.get()
+            cmd = self.i.get()
 
             if cmd is None:
                 break
             elif cmd == ">":
                 self.a.right()
-                s.next()
+                self.i.next()
             elif cmd == "<":
                 self.a.left()
-                s.next()
+                self.i.next()
             elif cmd == "+":
                 self.a.inc()
-                s.next()
+                self.i.next()
             elif cmd == "-":
                 self.a.dec()
-                s.next()
+                self.i.next()
             elif cmd == ".":
                 rl.append(self.a.get())
-                s.next()
+                self.i.next()
             elif cmd == ",":
                 self.a.put(self.getchar())
-                s.next()
+                self.i.next()
             elif cmd == "[":
                 if self.a.get() == 0:
-                    s.forward("]")
+                    self.i.forward("]")
                 else:
-                    s.next()
+                    self.i.next()
             elif cmd == "]":
                 if self.a.get() != 0:
-                    s.backward("[")
+                    self.i.backward("[")
                 else:
-                    s.next()
+                    self.i.next()
 
         return "".join(chr(i) for i in rl)
