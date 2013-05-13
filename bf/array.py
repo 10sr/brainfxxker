@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 class Array():
+    """Memory array class."""
+
     def __init__(self):
         self.reset()
         return
