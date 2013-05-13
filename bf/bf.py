@@ -24,7 +24,17 @@ class BF():
         return
 
     def add(self, s):
-        l = self.t.decode(s)
+        """Add instructions.
+
+        Args:
+            s: String or iterable of strings. If s is string, it is decoded by
+            Translator. If s is terable, each element must be chars (one size
+            string) and they are used directly for instructions.
+        """
+        if isinstance(s, str):
+            l = self.t.decode(s)
+        else:
+            l = s
         self.i.add(l)
         return
 

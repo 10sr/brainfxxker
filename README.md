@@ -9,6 +9,7 @@ Synopsis
 
     bf [-h] [-i] [-c string] [filename]
 
+
 Options
 -------
 
@@ -22,3 +23,35 @@ Run in interactive mode even if `-c` or filenames is given.
 ## `-c <string>`
 
 Run string as commands.
+
+
+Special commands for interactive mode
+-----------------------
+
+### `q`
+
+Quit immediately.
+
+### `h`
+
+Show help.
+
+### `A`
+
+Toggle if always print memory status.
+
+### `I`
+
+Toggle if always print instruction array status.
+
+### `a`
+
+Print current memory status.
+
+### `i`
+
+Print current instruction array status.
+
+### `p`
+
+Print current status of memory and instrution array.
