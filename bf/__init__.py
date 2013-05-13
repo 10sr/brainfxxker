@@ -17,6 +17,8 @@ def main(init_commands=None, interactive=True, commands=None):
                 break
             bf.add(s)
             r = bf.run()
+            bf.print_inst()
+            bf.print_array()
             print(r)
         print("Exit.")
     return

@@ -15,7 +15,7 @@ class BF():
         return
 
     def getchar(self):
-        """Get one char from self.inputsrt."""
+        """Get one char from self.inputstr."""
         raise NotImplementedError
 
     def reset(self):
@@ -28,17 +28,19 @@ class BF():
         self.i.add(l)
         return
 
+    def print_array(self):
+        print(self.a)
+        return
+
+    def print_inst(self):
+        print(self.i)
+        return
+
     def run(self):
         """Run to the end."""
-        # self.a.reset()
         rl = []                 # list of result in int
 
-        # l = self.t.decode(s)
-        # s = Instructions(l)
-
         while True:
-            print(self.i)
-            print(self.a)
             cmd = self.i.get()
 
             if cmd is None:
