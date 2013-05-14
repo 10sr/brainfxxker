@@ -78,8 +78,8 @@ def main_interactive(bf):
     print("Exit.")
     return
 
-def main(init_commands=None, interactive=True, commands=None):
-    bf = BF(commands)
+def main(init_commands=None, interactive=True, commands=None, debug=False):
+    bf = BF(commands=commands, debug=debug)
 
     if init_commands:
         bf.add(init_commands)
