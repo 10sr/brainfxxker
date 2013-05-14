@@ -61,3 +61,18 @@ class Instructions():
             elif current == first:
                 depth += 1
                 continue
+
+    def __str__(self):
+        string = "".join(self.s)
+        from textwrap import wrap
+        lines = wrap(string)
+        idx = self.i
+        result = []
+        for l in lines:
+            result.append(l)
+            if idx < 70:
+                idx_line = " " * idx + "^"
+                result.append(idx_line)
+            else:
+                idx = idx - 70
+        return "\n".join(result)
