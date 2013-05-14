@@ -70,9 +70,12 @@ class Instructions():
         result = []
         for l in lines:
             result.append(l)
-            if idx < 70:
+            if idx < 0:
+                pass
+            elif idx < 70:
                 idx_line = " " * idx + "^"
                 result.append(idx_line)
+                idx = idx - 70
             else:
                 idx = idx - 70
         return "\n".join(result)
