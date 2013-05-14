@@ -13,12 +13,19 @@ class BF():
         self.a = Array()
         self.t = Translator(commands)
         self.i = Instructions()
-        self.inputstr = input
+        self.input = input
         return
 
     def getchar(self):
-        """Get one char from self.inputstr."""
-        raise NotImplementedError
+        """Get one char from self.input."""
+        while True:
+            if self.input:
+                break
+            self.input = input("<<< ")
+
+        c = self.input[0]
+        self.input = self.input[1:]
+        return ord(c)
 
     def reset(self):
         self.a.reset()
@@ -51,7 +58,7 @@ class BF():
         return
 
     def run(self):
-        """Run to the end."""
+        """Run to the end and return outputs.."""
         rl = []                 # list of result in int
 
         while True:
