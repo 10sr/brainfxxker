@@ -23,7 +23,7 @@ class Array():
     def left(self):
         """Move pointer to left."""
         self.i -= 1
-        assert self.i >= 0
+        assert self.i >= 0, "i is {}".format(self.i)
         return self.i
 
     def inc(self):
