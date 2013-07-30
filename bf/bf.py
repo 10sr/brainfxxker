@@ -4,27 +4,49 @@ from bf.array import Array
 from bf.trans import Translator
 from bf.inst import Instructions
 
-class BF():
-    """Brainfxxk."""
+class BFException(Exception):
+    pass
 
-    def __init__(self, commands=None, input="", debug=False):
+class BFIOError(BFException):
+    pass
+
+class BF():
+    """Brainfxxk.
+
+    Attributes:
+        a: Memory array.
+        i: Instruction array.
+    """
+
+    def __init__(self, commands=None, debug=False):
+        """
+        Args:
+            commands: Array of commands string. None to use original bf
+                instructions.
+        """
         self.debug = debug
         self.clk_count = 0
         self.a = Array()
         self.t = Translator(commands)
         self.i = Instructions()
-        self.input = input
+        self.inputs = []
         return
 
-    def getchar(self):
-        """Get one char from self.input."""
-        while True:
-            if self.input:
-                break
-            self.input = input("<<< ")
+    def getchar(self, prompt="<<< "):
+        """Get one char as number. Extra letters are buffered."""
+        if len(self.inputs) == 0:
+            if prompt:
+                self.inputs = list(input(prompt))
+            else:
+                import sys, os
+                self.inputs = list(sys.stdin.read())
+                sys.stdin = open(os.devnull)
 
-        c = self.input[0]
-        self.input = self.input[1:]
+        try:
+            c = self.inputs[0]
+        except IndexError:
+            BFIOError("Input not available")
+        self.inputs = self.inputs[1:]
         return ord(c)
 
     def reset(self):
@@ -37,8 +59,8 @@ class BF():
 
         Args:
             s: String or iterable of strings. If s is string, it is decoded by
-            Translator. If s is terable, each element must be chars (one size
-            string) and they are used directly for instructions.
+            Translator. If s is other iterable object, each element must be
+            chars (one size string) and they are used directly for instructions.
         """
         if isinstance(s, str):
             l = self.t.decode(s)
@@ -57,8 +79,13 @@ class BF():
         print(self.i)
         return
 
-    def run(self):
-        """Run to the end and return outputs.."""
+    def run(self, input_prompt=None):
+        """Run to the end and return output string.
+
+        Args:
+            input_prompt: Prompt string used for input. If None, input is not
+                              available and abort with exception.
+        """
         rl = []                 # list of result in int
 
         while True:
@@ -82,7 +109,9 @@ class BF():
                 rl.append(self.a.get())
                 self.i.next()
             elif cmd == ",":
-                self.a.put(self.getchar())
+                if input_prompt is None:
+                    raise BFException("Input not available")
+                self.a.put(self.getchar(input_prompt))
                 self.i.next()
             elif cmd == "[":
                 if self.a.get() <= 0:

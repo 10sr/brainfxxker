@@ -52,10 +52,8 @@ def main(argv):
         with open(args.filename) as f:
             s = f.read()
         main_args["init_commands"] = main_args["init_commands"] + s
-    if main_args["init_commands"] and not args.i:
-        main_args["interactive"] = False
-    else:
-        main_args["interactive"] = True
+
+    main_args["interactive"] = args.i
 
     # bf.main(_helloworld)
     bf.main(**main_args)

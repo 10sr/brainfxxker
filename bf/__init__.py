@@ -6,7 +6,12 @@ import sys
 
 from bf.bf import BF
 
-class ExitInteractiveLoop(Exception):
+# how to do abotu input?
+# 1. if run in noninteractively, input from stdin
+# 2. if run interactively, input from stdin
+# 3. if command given as stdin (sys.stdin.isatty() == False), input is not available
+
+class _ExitInteractiveLoop(Exception):
     """Exception for exit interactive loop."""
     pass
 
@@ -35,7 +40,7 @@ def print_interactive_help():
     )
     return
 
-def main_interactive(bf):
+def _main_interactive(bf, input_prompt):
     global_print_memory = False
     global_print_inst = False
 
@@ -47,12 +52,12 @@ def main_interactive(bf):
             try:
                 s = input(">>> ")
             except EOFError:
-                raise ExitInteractiveLoop
+                raise _ExitInteractiveLoop
             r = ""
 
             for i in s:
                 if i == "q":
-                    raise ExitInteractiveLoop
+                    raise _ExitInteractiveLoop
                 elif i == "h":
                     print_interactive_help()
                 elif i == "A":
@@ -65,37 +70,83 @@ def main_interactive(bf):
                     bf.print_inst()
                 else:
                     bf.add(i)
-                    r = r + bf.run()
+                    r = r + bf.run(input_prompt)
 
             print(r)
             if global_print_memory:
                 bf.print_array()
             if global_print_inst:
                 bf.print_inst()
-    except ExitInteractiveLoop:
+    except _ExitInteractiveLoop:
         pass
 
     print("Exit.")
     return
 
 def main(init_commands=None, interactive=True, commands=None, debug=False):
-    bf = BF(commands=commands, debug=debug)
+    # 1. -c or filename given?
+    # 2. sys.stdin.isatty() ?
+    # 3. -i given?
 
-    if init_commands:
-        bf.add(init_commands)
-    r = bf.run()
-    print(r)
+    # TTF: input without prompt
+    # TFF: input without prompt
+    # TFT: input is not available
+    # FFT: input is not available
+    # FFF: input is not available
+    # TTT: input is not available while processing init commands,
+    #      input with prompt while processing interactive commands
+    # FTT: input with prompt
+    # FTF: input with prompt
 
-    if not interactive:
-        return
+    # if (-c or filename given) and -i not given:
+    #     input without prompt
+    # elif not sys.stdin.isatty():
+    #     input is not available
+    # else:
+    #     input is not available while init command,
+    #     prompt while interactive command
 
     if commands:
         print("Commands cannot be changed when in interactive mode.",
               file=sys.stderr)
         sys.exit(1)
 
-    main_interactive(bf)
-    return
+    import sys
+    isatty = sys.stdin.isatty()
+
+    bf = BF(commands=commands, debug=debug)
+
+    if not interactive and init_commands:
+        bf.add(init_commands)
+        r = bf.run("")
+        print(r)
+        return
+
+    if init_commands:
+        bf.add(init_commands)
+        r = bf.run(None)
+        print(r)
+
+    if isatty:
+        input_prompt = "<<< "
+    else:
+        input_prompt = None
+
+    if isatty and (interactive or not init_commands):
+        # input is tty, and interactive flag explicitly given or no initial
+        # command given
+        return _main_interactive(bf, input_prompt)
+    else:
+        if interactive:
+            # force interactive (-i given and yet input is not tty)
+            return _main_interactive(bf, input_prompt)
+
+        else:
+            # not isatty and not interactive
+            bf.add(sys.stdin.read())
+            r = bf.run(input_prompt)
+            print(r)
+            return
 
 if __name__ == "__main__":
     pass
