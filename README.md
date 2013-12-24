@@ -26,7 +26,7 @@ Run string as commands.
 
 
 Special commands for interactive mode
------------------------
+-------------------------------------
 
 ### `q`
 
@@ -55,3 +55,10 @@ Print current instruction array status.
 ### `p`
 
 Print current status of memory and instrution array.
+
+
+Inputs
+------
+
+When not in interactive mode and commands are given from a file or `-c` option,
+bf accept input normally: read stdin until EOF.

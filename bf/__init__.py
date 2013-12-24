@@ -3,8 +3,13 @@
 __version__ = "0.0.1"
 
 import sys
+from builtins import input as b_input
+
+class BFException(Exception):
+    pass
 
 from bf.bf import BF
+from bf.input import Input
 
 # how to do abotu input?
 # 1. if run in noninteractively, input from stdin
@@ -40,7 +45,7 @@ def print_interactive_help():
     )
     return
 
-def _main_interactive(bf, input_prompt):
+def _main_interactive(bf):
     global_print_memory = False
     global_print_inst = False
 
@@ -50,7 +55,7 @@ def _main_interactive(bf, input_prompt):
     try:
         while True:
             try:
-                s = input(">>> ")
+                s = b_input(">>> ")
             except EOFError:
                 raise _ExitInteractiveLoop
             r = ""
@@ -70,7 +75,7 @@ def _main_interactive(bf, input_prompt):
                     bf.print_inst()
                 else:
                     bf.add(i)
-                    r = r + bf.run(input_prompt)
+                    r = r + bf.run()
 
             print(r)
             if global_print_memory:
@@ -85,16 +90,17 @@ def _main_interactive(bf, input_prompt):
 
 def main(init_commands=None, interactive=True, commands=None, debug=False):
     # 1. -c or filename given?
-    # 2. sys.stdin.isatty() ?
+    # 2. sys.stdin.isatty() ? (input is connected to tty and not a file)
     # 3. -i given?
 
     # TTF: input without prompt
     # TFF: input without prompt
+
     # TFT: input is not available
     # FFT: input is not available
     # FFF: input is not available
-    # TTT: input is not available while processing init commands,
-    #      input with prompt while processing interactive commands
+
+    # TTT: input with prompt
     # FTT: input with prompt
     # FTF: input with prompt
 
@@ -103,8 +109,7 @@ def main(init_commands=None, interactive=True, commands=None, debug=False):
     # elif not sys.stdin.isatty():
     #     input is not available
     # else:
-    #     input is not available while init command,
-    #     prompt while interactive command
+    #     input with prompt
 
     if commands:
         print("Commands cannot be changed when in interactive mode.",
@@ -114,39 +119,42 @@ def main(init_commands=None, interactive=True, commands=None, debug=False):
     import sys
     isatty = sys.stdin.isatty()
 
-    bf = BF(commands=commands, debug=debug)
+    inp = Input()
+    bf = BF(commands=commands, debug=debug, input=inp)
 
     if not interactive and init_commands:
+        inp.prompt = ""
         bf.add(init_commands)
-        r = bf.run("")
+        r = bf.run()
         print(r)
         return
 
+    if isatty:
+        inp.prompt = "<<< "
+    else:
+        inp.prompt = None
+
     if init_commands:
         bf.add(init_commands)
-        r = bf.run(None)
+        r = bf.run()
         print(r)
-
-    if isatty:
-        input_prompt = "<<< "
-    else:
-        input_prompt = None
 
     if isatty and (interactive or not init_commands):
         # input is tty, and interactive flag explicitly given or no initial
         # command given
-        return _main_interactive(bf, input_prompt)
-    else:
-        if interactive:
-            # force interactive (-i given and yet input is not tty)
-            return _main_interactive(bf, input_prompt)
+        return _main_interactive(bf)
 
-        else:
-            # not isatty and not interactive
-            bf.add(sys.stdin.read())
-            r = bf.run(input_prompt)
-            print(r)
-            return
+    elif interactive:
+        # force interactive (-i given and yet input is not tty)
+        # strange case?
+        return _main_interactive(bf)
+
+    else:
+        # input is not a tty and not interactive (command are given from stdin)
+        bf.add(sys.stdin.read())
+        r = bf.run()
+        print(r)
+        return
 
 if __name__ == "__main__":
     pass

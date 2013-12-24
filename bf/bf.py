@@ -4,12 +4,6 @@ from bf.array import Array
 from bf.trans import Translator
 from bf.inst import Instructions
 
-class BFException(Exception):
-    pass
-
-class BFIOError(BFException):
-    pass
-
 class BF():
     """Brainfxxk.
 
@@ -18,7 +12,7 @@ class BF():
         i: Instruction array.
     """
 
-    def __init__(self, commands=None, debug=False):
+    def __init__(self, commands=None, debug=False, input=None):
         """
         Args:
             commands: Array of commands string. None to use original bf
@@ -29,25 +23,8 @@ class BF():
         self.a = Array()
         self.t = Translator(commands)
         self.i = Instructions()
-        self.inputs = []
+        self.input = input
         return
-
-    def getchar(self, prompt="<<< "):
-        """Get one char as number. Extra letters are buffered."""
-        if len(self.inputs) == 0:
-            if prompt:
-                self.inputs = list(input(prompt))
-            else:
-                import sys, os
-                self.inputs = list(sys.stdin.read())
-                sys.stdin = open(os.devnull)
-
-        try:
-            c = self.inputs[0]
-        except IndexError:
-            BFIOError("Input not available")
-        self.inputs = self.inputs[1:]
-        return ord(c)
 
     def reset(self):
         self.a.reset()
@@ -79,7 +56,7 @@ class BF():
         print(self.i)
         return
 
-    def run(self, input_prompt=None):
+    def run(self):
         """Run to the end and return output string.
 
         Args:
@@ -109,9 +86,7 @@ class BF():
                 rl.append(self.a.get())
                 self.i.next()
             elif cmd == ",":
-                if input_prompt is None:
-                    raise BFException("Input not available")
-                self.a.put(self.getchar(input_prompt))
+                self.a.put(self.input.getchar())
                 self.i.next()
             elif cmd == "[":
                 if self.a.get() <= 0:
