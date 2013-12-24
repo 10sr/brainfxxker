@@ -23,6 +23,9 @@ class Input():
         self.file = file
         return
 
+    def __str__(self):
+        return ",".join(self.buf)
+
     def getchar(self):
         """Get one char as number. Extra letters are buffered."""
         # what should be returned when EOF?

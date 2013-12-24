@@ -29,7 +29,7 @@ def print_interactive_help():
         "  + : Increment current data.\n"
         "  - : Decrement current data.\n"
         "  . : Print current data as char.\n"
-        "  , : Read one string from input (Not implemented yet).\n"
+        "  , : Read one string from input.\n"
         "  [ : Jump right to nearest `]' if current data is 0.\n"
         "  ] : Jump left to nearest `[' if current data is not 0.\n"
         "\n"
@@ -37,10 +37,15 @@ def print_interactive_help():
         "\n"
         "  q : Quit Brainfxxer.\n"
         "  h : Show this help.\n"
-        "  A : Toggle if always print memory status before prompt.\n"
-        "  I : Toggle if always print instruction array status before prompt.\n"
-        "  a : Print current memory status.\n"
-        "  i : Print current instruction status.\n"
+        "\n"
+        "  A : Toggle if always print memory array before prompt.\n"
+        "  I : Toggle if always print instruction array before prompt.\n"
+        "  B : Toggle if always print input buffer before prompt.\n"
+        "\n"
+        "  a : Print current memory array.\n"
+        "  i : Print current instruction array.\n"
+        "  b : Print current input buffer.\n"
+        "\n"
         "  p : Print current stauts of memoery and instruction array."
     )
     return
@@ -48,6 +53,7 @@ def print_interactive_help():
 def _main_interactive(bf):
     global_print_memory = False
     global_print_inst = False
+    global_print_input = False
 
     print("Brainfxxker {}".format(__version__))
     print("h for help, q for quit.")
@@ -55,7 +61,11 @@ def _main_interactive(bf):
     try:
         while True:
             try:
-                s = b_input(">>> ")
+                s = b_input("{}{}{}>>> ".format(
+                    "A" if global_print_memory else "",
+                    "I" if global_print_inst else "",
+                    "B" if global_print_input else ""
+                ))
             except EOFError:
                 raise _ExitInteractiveLoop
             r = ""
@@ -69,10 +79,14 @@ def _main_interactive(bf):
                     global_print_memory = not global_print_memory
                 elif i == "I":
                     global_print_inst = not global_print_inst
+                elif i == "B":
+                    global_print_input = not global_print_input
                 elif i == "a":
                     bf.print_array()
                 elif i == "i":
                     bf.print_inst()
+                elif i == "b":
+                    bf.print_input()
                 else:
                     bf.add(i)
                     r = r + bf.run()
@@ -82,6 +96,8 @@ def _main_interactive(bf):
                 bf.print_array()
             if global_print_inst:
                 bf.print_inst()
+            if global_print_input:
+                bf.print_input()
     except _ExitInteractiveLoop:
         pass
 

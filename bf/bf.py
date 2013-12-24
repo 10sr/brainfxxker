@@ -56,6 +56,10 @@ class BF():
         print(self.i)
         return
 
+    def print_input(self):
+        print(self.input)
+        return
+
     def run(self):
         """Run to the end and return output string.
 
