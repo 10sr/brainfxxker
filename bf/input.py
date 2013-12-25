@@ -12,15 +12,16 @@ class Input():
 
     Attributes:
         prompt: String for prompt
-        file: File object for input
+        file: File object for input or None to read from stdin
     """
 
     prompt = None
     file = None
-    buf = []
+    buf = None
 
-    def __init__(self, file=sys.stdin):
+    def __init__(self, file=None):
         self.file = file
+        self.buf = []
         return
 
     def __str__(self):
@@ -30,13 +31,14 @@ class Input():
         """Get one char as number. Extra letters are buffered."""
         # what should be returned when EOF?
         import sys
-        if len(self.buf) == 0 and self.file:
-            if self.prompt is None:
+        if len(self.buf) == 0:
+            if self.file:
+                self.buf.append(self.file.read(1))
+            elif self.prompt is None:
                 raise BFIOError
             elif len(self.prompt) == 0:
                 # import sys, os
-                self.buf = list(sys.stdin.read())
-                self.file = None
+                self.buf = list(sys.stdin.read(1))
                 # sys.stdin = open(os.devnull)
             else:
                 self.buf = list(input(self.prompt))
