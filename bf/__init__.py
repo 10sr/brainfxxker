@@ -46,8 +46,6 @@ def _print_interactive_help():
         "  a : Print current memory array.\n"
         "  i : Print current instruction array.\n"
         "  b : Print current input buffer.\n"
-        "\n"
-        "  p : Print current stauts of memoery and instruction array."
     )
     return
 
@@ -58,11 +56,6 @@ def _main_interactive(bf):
     except ImportError:
         print("Module readline not available.")
         readline = None
-    else:
-        if "libedit" in readline.__doc__:
-            readline.parse_and_bind("bind ^I rl_complete")
-        else:
-            readline.parse_and_bind("tab: complete")
 
 
     global_print_memory = False
