@@ -37,6 +37,8 @@ def main(argv):
     parser.add_argument("--debug", action="store_true",
                         help="go into debugging mode",
                         default=False)
+    parser.add_argument("-f", metavar="input_file",
+                        help="file name for input")
     # parser.add_argument("-s")
 
     args = parser.parse_args(argv[1:])
@@ -47,11 +49,16 @@ def main(argv):
     main_args = dict()
 
     main_args["init_commands"] = args.c or ""
+
     main_args["debug"] = args.debug
+
     if args.filename:
         with open(args.filename) as f:
             s = f.read()
         main_args["init_commands"] = main_args["init_commands"] + s
+
+    if args.f:
+        main_args["input"] = open(args.f)
 
     main_args["interactive"] = args.i
 

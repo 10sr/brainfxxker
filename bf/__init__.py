@@ -112,7 +112,8 @@ def _main_interactive(bf):
     print("Exit.")
     return
 
-def main(init_commands=None, interactive=True, commands=None, debug=False):
+def main(init_commands=None, interactive=True, commands=None, debug=False,
+         input=None):
     # 1. -c or filename given?
     # 2. sys.stdin.isatty() ? (input is connected to tty and not a file)
     # 3. -i given?
@@ -127,6 +128,8 @@ def main(init_commands=None, interactive=True, commands=None, debug=False):
     # TTT: input with prompt
     # FTT: input with prompt
     # FTF: input with prompt
+
+    # If input file is given, input is always available without prompt
 
     # if (-c or filename given) and -i not given:
     #     input without prompt
@@ -143,7 +146,7 @@ def main(init_commands=None, interactive=True, commands=None, debug=False):
     import sys
     isatty = sys.stdin.isatty()
 
-    inp = Input()
+    inp = Input(input)
     bf = BF(commands=commands, debug=debug, input=inp)
 
     if not interactive and init_commands:

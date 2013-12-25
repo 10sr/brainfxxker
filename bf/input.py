@@ -10,6 +10,13 @@ class BFIOError(BFException):
 class Input():
     """Input for brainfxxk.
 
+    getchar() to get one letter from input buffer (self.buf).
+    if the buffer is empty, inputs are got in several ways:
+    If input file is given, read one letter from that.
+    Else if self.prompt is None, input is not available and raise BFIOError.
+    Else if self.prompt is empty string, read one letter from stdin.
+    Otherwise, emit prompt and get user input.
+
     Attributes:
         prompt: String for prompt
         file: File object for input or None to read from stdin
@@ -38,7 +45,7 @@ class Input():
                 raise BFIOError
             elif len(self.prompt) == 0:
                 # import sys, os
-                self.buf = list(sys.stdin.read(1))
+                self.buf.append(sys.stdin.read(1))
                 # sys.stdin = open(os.devnull)
             else:
                 self.buf = list(input(self.prompt))
