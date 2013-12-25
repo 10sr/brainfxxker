@@ -11,6 +11,7 @@ class BFException(Exception):
 from bf.bf import BF
 from bf.input import Input
 
+
 # how to do abotu input?
 # 1. if run in noninteractively, input from stdin
 # 2. if run interactively, input from stdin
@@ -20,7 +21,7 @@ class _ExitInteractiveLoop(Exception):
     """Exception for exit interactive loop."""
     pass
 
-def print_interactive_help():
+def _print_interactive_help():
     print(
         "Brainfxxk commands:\n"
         "\n"
@@ -51,6 +52,19 @@ def print_interactive_help():
     return
 
 def _main_interactive(bf):
+    # prepare readline module
+    try:
+        import readline
+    except ImportError:
+        print("Module readline not available.")
+        readline = None
+    else:
+        if "libedit" in readline.__doc__:
+            readline.parse_and_bind("bind ^I rl_complete")
+        else:
+            readline.parse_and_bind("tab: complete")
+
+
     global_print_memory = False
     global_print_inst = False
     global_print_input = False
@@ -61,20 +75,20 @@ def _main_interactive(bf):
     try:
         while True:
             try:
-                s = b_input("{}{}{}>>> ".format(
+                s = b_input(":: {}{}{}>>> ".format(
                     "A" if global_print_memory else "",
                     "I" if global_print_inst else "",
                     "B" if global_print_input else ""
                 ))
             except EOFError:
                 raise _ExitInteractiveLoop
-            r = ""
+            r = []
 
             for i in s:
                 if i == "q":
                     raise _ExitInteractiveLoop
                 elif i == "h":
-                    print_interactive_help()
+                    _print_interactive_help()
                 elif i == "A":
                     global_print_memory = not global_print_memory
                 elif i == "I":
@@ -82,22 +96,23 @@ def _main_interactive(bf):
                 elif i == "B":
                     global_print_input = not global_print_input
                 elif i == "a":
-                    bf.print_array()
+                    print(bf.str_array())
                 elif i == "i":
-                    bf.print_inst()
+                    print(bf.str_inst())
                 elif i == "b":
-                    bf.print_input()
+                    print(bf.str_input())
                 else:
                     bf.add(i)
-                    r = r + bf.run()
 
-            print(r)
+            r = bf.run()
+            r and print("OUT:" + "".join(r))
             if global_print_memory:
-                bf.print_array()
+                print("MEM:" + bf.str_array())
             if global_print_inst:
-                bf.print_inst()
+                print("INS:")
+                print(bf.str_inst())
             if global_print_input:
-                bf.print_input()
+                print("BUF:" + bf.str_input())
     except _ExitInteractiveLoop:
         pass
 
@@ -142,7 +157,7 @@ def main(init_commands=None, interactive=True, commands=None, debug=False):
         inp.prompt = ""
         bf.add(init_commands)
         r = bf.run()
-        print(r)
+        r and print("".join(r))
         return
 
     if isatty:
@@ -153,7 +168,7 @@ def main(init_commands=None, interactive=True, commands=None, debug=False):
     if init_commands:
         bf.add(init_commands)
         r = bf.run()
-        print(r)
+        r and print("".join(r))
 
     if isatty and (interactive or not init_commands):
         # input is tty, and interactive flag explicitly given or no initial
@@ -169,7 +184,7 @@ def main(init_commands=None, interactive=True, commands=None, debug=False):
         # input is not a tty and not interactive (command are given from stdin)
         bf.add(sys.stdin.read())
         r = bf.run()
-        print(r)
+        r and print("".join(r))
         return
 
 if __name__ == "__main__":

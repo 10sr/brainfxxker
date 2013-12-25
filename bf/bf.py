@@ -46,27 +46,19 @@ class BF():
         self.i.add(l)
         return
 
-    def print_array(self):
+    def str_array(self):
         """Print memory array."""
-        print(self.a)
-        return
+        return str(self.a)
 
-    def print_inst(self):
+    def str_inst(self):
         """Print instruction array."""
-        print(self.i)
-        return
+        return str(self.i)
 
-    def print_input(self):
-        print(self.input)
-        return
+    def str_input(self):
+        return str(self.input)
 
     def run(self):
-        """Run to the end and return output string.
-
-        Args:
-            input_prompt: Prompt string used for input. If None, input is not
-                              available and abort with exception.
-        """
+        """Run to the end and return a iterable of output chars or None."""
         rl = []                 # list of result in int
 
         while True:
@@ -109,4 +101,6 @@ class BF():
                 self.print_inst()
                 self.print_array()
 
-        return "".join(chr(i) for i in rl)
+        if len(rl) == 0:
+            return None
+        return (chr(i) for i in rl)

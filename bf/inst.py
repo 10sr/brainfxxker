@@ -66,7 +66,7 @@ class Instructions():
         string = "".join(self.s)
         from textwrap import wrap
         lines = wrap(string)
-        idx = self.i
+        idx = self.i - 1        # the last one that was read
         result = []
         for l in lines:
             result.append(l)
