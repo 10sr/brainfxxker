@@ -8,8 +8,8 @@ from builtins import input as b_input
 class BFException(Exception):
     pass
 
-from bf.bf import BF
-from bf.input import Input
+from brainfxxker.bf import BF
+from brainfxxker.input import Input
 
 
 # how to do abotu input?

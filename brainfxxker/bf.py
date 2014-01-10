@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-from bf.array import Array
-from bf.trans import Translator
-from bf.inst import Instructions
+from brainfxxker.array import Array
+from brainfxxker.trans import Translator
+from brainfxxker.inst import Instructions
 
 class BF():
     """Brainfxxk.

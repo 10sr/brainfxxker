@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from bf.lexer import Lexer
-from bf.inst import Instructions
+from brainfxxker.lexer import Lexer
+from brainfxxker.inst import Instructions
 
 class Translator():
     """Translator.

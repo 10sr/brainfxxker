@@ -2,7 +2,7 @@
 
 import sys
 
-from bf import BFException
+from brainfxxker import BFException
 
 class BFIOError(BFException):
     pass

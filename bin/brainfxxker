@@ -19,7 +19,7 @@ def add_path():
 def main(argv):
     import argparse as ap
 
-    import bf
+    import brainfxxker as bf
 
     parser = ap.ArgumentParser()
 
