@@ -1,7 +1,7 @@
 Brainfxxker
 ===========
 
-A [Brainfxxk](http://en.wikipedia.org/wiki/Brainfuck) machine.
+A [Brainfxxk](http://en.wikipedia.org/wiki/Brainfuck) machine with an interactive interface.
 
 
 Synopsis
